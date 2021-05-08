@@ -1,0 +1,20 @@
+{
+  "PRICING": {
+    "name": "PRICING",
+    "index": 0,
+    "mandatory": true,
+    "needsAdditionalCheck": true,
+    "additionalParams": [
+      {
+        "name": "DF_IND",
+        "value": "Y"
+      }
+    ]
+  },
+  "DF_IND": {
+    "name": "DF_IND",
+    "index": 1,
+    "mandatory": true,
+    "needsAdditionalCheck": false
+  }
+}
