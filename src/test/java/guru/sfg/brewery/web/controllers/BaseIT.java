@@ -11,9 +11,6 @@ import java.util.stream.Stream;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-/**
- * Created by jt on 6/13/20.
- */
 public abstract class BaseIT {
     @Autowired
     WebApplicationContext wac;
@@ -26,6 +23,11 @@ public abstract class BaseIT {
                 .webAppContextSetup(wac)
                 .apply(springSecurity())
                 .build();
+    }
+
+    public static Stream<Arguments> getStreamAdminCustomer() {
+        return Stream.of(Arguments.of("spring" , "guru"),
+                Arguments.of("scott", "tiger"));
     }
 
     public static Stream<Arguments> getStreamAllUsers() {
