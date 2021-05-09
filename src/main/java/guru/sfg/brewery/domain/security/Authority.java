@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -29,15 +27,6 @@ public class Authority {
 
     private String permission;
 
-    @ManyToMany(mappedBy = "authorities", fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Authority{");
-        sb.append("id=").append(id);
-        sb.append('}');
-        return sb.toString();
-    }
+    @ManyToMany(mappedBy = "authorities")
+    private Set<Role> roles;
 }
-

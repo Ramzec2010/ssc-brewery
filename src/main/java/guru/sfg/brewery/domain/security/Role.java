@@ -36,7 +36,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
+    private Set<User> users;
 
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
@@ -44,12 +44,4 @@ public class Role {
             joinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private Set<Authority> authorities = new HashSet<>();
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Role{");
-        sb.append("id=").append(id);
-        sb.append('}');
-        return sb.toString();
-    }
 }
