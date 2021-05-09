@@ -16,16 +16,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+/**
+ * Created by jt on 6/29/20.
+ */
 @Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -33,11 +36,20 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
-        @Singular
+    @Singular
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(name = "role_authority", joinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")},
+    @JoinTable(name = "role_authority",
+            joinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Role{");
+        sb.append("id=").append(id);
+        sb.append('}');
+        return sb.toString();
+    }
 }

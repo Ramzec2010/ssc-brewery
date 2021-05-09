@@ -20,10 +20,13 @@ import javax.persistence.Transient;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+/**
+ * Created by jt on 6/21/20.
+ */
 @Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 public class User {
@@ -37,7 +40,8 @@ public class User {
 
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+    @JoinTable(name = "user_role",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
     private Set<Role> roles;
 
@@ -53,10 +57,14 @@ public class User {
 
     @Builder.Default
     private Boolean accountNonExpired = true;
+
     @Builder.Default
     private Boolean accountNonLocked = true;
+
     @Builder.Default
     private Boolean credentialsNonExpired = true;
+
     @Builder.Default
     private Boolean enabled = true;
+
 }

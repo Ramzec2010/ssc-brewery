@@ -14,10 +14,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -38,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
+
     /*    @Bean
         PasswordEncoder passwordEncoder() {
             return NoOpPasswordEncoder.getInstance();
@@ -62,16 +61,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     authorize
                             .antMatchers("/h2-console/**").permitAll()  //do not use in production
                             .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
-                            .antMatchers(HttpMethod.GET, "/api/v1/beer/**")
-                                .hasAnyRole("ADMIN","USER", "CUSTOMER")
-                            .mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
+                            //.antMatchers(HttpMethod.GET, "/api/v1/beer/**")
+                            //.hasAnyRole("ADMIN", "USER", "CUSTOMER")
+                            //.mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
                             .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries")
-                                .hasAnyRole("ADMIN","CUSTOMER")
+                            .hasAnyRole("ADMIN", "CUSTOMER")
                             .mvcMatchers(HttpMethod.GET, "/brewery/breweries").hasAnyRole("ADMIN", "CUSTOMER")
-                            .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}")
-                                .hasAnyRole("ADMIN","USER", "CUSTOMER")
-                            .mvcMatchers("/beers/find","/beers/{beerId}")
-                                .hasAnyRole("ADMIN","USER","CUSTOMER");
+                           // .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}")
+                           // .hasAnyRole("ADMIN", "USER", "CUSTOMER")
+                            .mvcMatchers("/beers/find", "/beers/{beerId}")
+                            .hasAnyRole("ADMIN", "USER", "CUSTOMER");
 
                 })
 /*                .authorizeRequests(authorize -> {
