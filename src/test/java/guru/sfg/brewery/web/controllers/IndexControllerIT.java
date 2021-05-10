@@ -4,6 +4,7 @@ import guru.sfg.brewery.repositories.BeerInventoryRepository;
 import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.repositories.CustomerRepository;
 import guru.sfg.brewery.security.JpaUserDetailsService;
+import guru.sfg.brewery.services.BeerOrderService;
 import guru.sfg.brewery.services.BeerService;
 import guru.sfg.brewery.services.BreweryService;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ public class IndexControllerIT extends BaseIT {
 
     @MockBean
     BeerService beerService;
+
+    @MockBean
+    BeerOrderService beerOrderService;
 
     @Test
     void testGetIndexSlash() throws Exception{
