@@ -22,7 +22,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 //Enable method security annotation config
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // needed for use with Spring Data JPA SPeL
@@ -58,11 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
+/*        http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable();
         http.addFilterAfter(restUrlVariableAuthFilter(authenticationManager()), RestHeaderAuthFilter.class)
-                .csrf().disable();
+                .csrf().disable();*/
 
         http
                 .authorizeRequests(authorize -> {
@@ -89,7 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .and().httpBasic();
+                .and().httpBasic()
+                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
 
         //h2 console config
         http.headers().frameOptions().sameOrigin();
