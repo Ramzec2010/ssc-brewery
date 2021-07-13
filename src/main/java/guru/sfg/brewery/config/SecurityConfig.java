@@ -88,8 +88,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .and().httpBasic()
+                .formLogin(loginConfigurer -> {
+                    loginConfigurer.loginProcessingUrl("/login")
+                            .loginPage("/").permitAll()
+                            .successForwardUrl("/")
+                            .defaultSuccessUrl("/");
+                })
+
+
+                .logout(logoutConfigurer -> {
+                    logoutConfigurer.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                            .logoutSuccessUrl("/")
+                            .permitAll();
+                }).httpBasic()
                 .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
 
         //h2 console config
