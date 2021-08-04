@@ -4,26 +4,29 @@ import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.RestUrlVariableAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 //Enable method security annotation config
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
 
     // needed for use with Spring Data JPA SPeL
     @Bean
@@ -69,16 +72,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     authorize
                             .antMatchers("/h2-console/**").permitAll()  //do not use in production
                             .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
-                            //.antMatchers(HttpMethod.GET, "/api/v1/beer/**")
-                            //.hasAnyRole("ADMIN", "USER", "CUSTOMER")
-                            //.mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
-                            //.mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries")
-                            //.hasAnyRole("ADMIN", "CUSTOMER")
-                            //.mvcMatchers(HttpMethod.GET, "/brewery/breweries").hasAnyRole("ADMIN", "CUSTOMER")
-                           // .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}")
-                           // .hasAnyRole("ADMIN", "USER", "CUSTOMER")
-                            //.mvcMatchers("/beers/find", "/beers/{beerId}")
-                            //.hasAnyRole("ADMIN", "USER", "CUSTOMER")
+                    //.antMatchers(HttpMethod.GET, "/api/v1/beer/**")
+                    //.hasAnyRole("ADMIN", "USER", "CUSTOMER")
+                    //.mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
+                    //.mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries")
+                    //.hasAnyRole("ADMIN", "CUSTOMER")
+                    //.mvcMatchers(HttpMethod.GET, "/brewery/breweries").hasAnyRole("ADMIN", "CUSTOMER")
+                    // .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}")
+                    // .hasAnyRole("ADMIN", "USER", "CUSTOMER")
+                    //.mvcMatchers("/beers/find", "/beers/{beerId}")
+                    //.hasAnyRole("ADMIN", "USER", "CUSTOMER")
                     ;
 
                 })
@@ -93,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .loginPage("/").permitAll()
                             .successForwardUrl("/")
                             .defaultSuccessUrl("/")
-                    .failureUrl("/?error");
+                            .failureUrl("/?error");
                 })
 
 
@@ -102,7 +105,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .logoutSuccessUrl("/?logout")
                             .permitAll();
                 }).httpBasic()
-                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
+                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**")
+                .and().rememberMe()
+                        .key("sfg-key")
+                        .userDetailsService(userDetailsService);
 
         //h2 console config
         http.headers().frameOptions().sameOrigin();
