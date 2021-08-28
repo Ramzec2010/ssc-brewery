@@ -44,6 +44,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/")
 @RestController
+//Cross origin applied to all methods in the current controller
+//@CrossOrigin
 public class BeerRestController {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
@@ -121,6 +123,7 @@ public class BeerRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CrossOrigin
     @BeerDeletePermission
     @DeleteMapping({"beer/{beerId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
