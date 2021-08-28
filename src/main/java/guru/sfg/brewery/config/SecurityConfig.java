@@ -22,16 +22,16 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
+/*@Configuration
 @EnableWebSecurity
 //Enable method security annotation config
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)*/
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PersistentTokenRepository persistentTokenRepository;
-
+    private final PasswordEncoder passwordEncoder;
     private final Google2faFilter google2faFilter;
 
     // needed for use with Spring Data JPA SPeL
@@ -60,10 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             return new LdapShaPasswordEncoder();
             return  new StandardPasswordEncoder();
         }*/
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return SfgPasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -132,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.jpaUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(this.jpaUserDetailsService).passwordEncoder(passwordEncoder);
 /*        auth.inMemoryAuthentication()
                 .withUser("spring")
                 //{noop} no operation password encoder
